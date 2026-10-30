@@ -3,9 +3,13 @@ import type { Expense, Settings } from './types'
 import { pendingReview, unneededTotal } from './review'
 
 const settings: Settings = {
-  weeklyBudget: 10_000,
+  payday: 25,
   weekStartsOn: 1,
+  savings: { mode: 'amount', amount: 20_000 },
+  fixedCosts: { mode: 'total', total: 80_000 },
+  leftover: 'toSavings',
   startedAt: '2025-01-06T00:00:00+09:00',
+  initialFree: 10_000,
 }
 
 describe('unneededTotal', () => {
@@ -29,6 +33,7 @@ describe('unneededTotal', () => {
 describe('pendingReview', () => {
   it('先週以前の未判定支出を古い順で返す', () => {
     const expenses: Expense[] = [
+      { id: 'before-start', amount: 50, at: '2025-01-05T12:00:00+09:00' },
       { id: 'recent-old', amount: 200, at: '2025-01-12T12:00:00+09:00' },
       { id: 'current', amount: 400, at: '2025-01-13T00:00:00+09:00' },
       { id: 'reviewed', amount: 800, at: '2025-01-10T12:00:00+09:00', verdict: 'needed' },
@@ -41,6 +46,6 @@ describe('pendingReview', () => {
       settings,
     )
 
-    expect(result.map(({ id }) => id)).toEqual(['oldest', 'recent-old'])
+    expect(result.map(({ id }) => id)).toEqual(['recent-old'])
   })
 })

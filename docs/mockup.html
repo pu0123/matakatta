@@ -42,6 +42,8 @@
   .bar { margin-top: 28px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
   .bar i { display: block; height: 100%; width: 58%; background: var(--ink); }
   .barlabel { display: flex; justify-content: space-between; font-size: 12px; color: var(--sub); margin-top: 6px; }
+  .period { margin-top: 20px; display: flex; justify-content: space-between; font-size: 13px; color: var(--sub); }
+  .period b { color: var(--ink); font-weight: 600; }
   .note { margin-top: 32px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; font-size: 13px; line-height: 1.6; }
   .note .num { font-weight: 600; }
   .addbtn {
@@ -73,10 +75,60 @@
   .choices .no { background: var(--ink); color: #fff; }
   .tally { margin-top: auto; margin-bottom: 32px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 13px; color: var(--sub); display: flex; justify-content: space-between; }
   .tally .num { color: var(--minus); font-weight: 600; font-size: 15px; }
+
+  /* 初期設定・給料日 */
+  .form { padding: 52px 20px 0; flex: 1; display: flex; flex-direction: column; }
+  .form h2 { font-size: 20px; margin: 0; font-weight: 600; }
+  .form .lead { font-size: 13px; color: var(--sub); margin-top: 4px; line-height: 1.6; }
+  .rows { margin-top: 20px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid var(--line); font-size: 15px; }
+  .row:first-child { border-top: 0; }
+  .row .v { font-weight: 600; }
+  .row .k small { display: block; font-size: 11px; color: var(--sub); margin-top: 2px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; font-size: 11px; margin-left: 8px; vertical-align: middle; }
+  .seg span { padding: 3px 7px; color: var(--sub); }
+  .seg .on { background: var(--ink); color: #fff; }
+  .result { margin-top: 18px; padding: 0 2px; }
+  .result .k { font-size: 13px; color: var(--sub); }
+  .result .v { font-size: 34px; font-weight: 600; margin-top: 2px; }
+  .result .v small { font-size: 18px; font-weight: 500; }
+  .result .d { font-size: 13px; color: var(--sub); margin-top: 2px; }
+  .result .d .num { color: var(--ink); font-weight: 600; }
+  .primary { margin: auto 0 32px; height: 56px; border-radius: 14px; border: 0; background: var(--ink); color: #fff; font-size: 17px; font-weight: 600; font-family: inherit; }
+  .closed { margin-top: 20px; padding: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; font-size: 13px; line-height: 1.8; }
+  .closed .line { display: flex; justify-content: space-between; }
+  .closed .saved { color: var(--ok); font-weight: 600; }
+  .field { margin-top: 22px; }
+  .field .k { font-size: 13px; color: var(--sub); }
+  .field .v { font-size: 44px; font-weight: 600; border-bottom: 2px solid var(--ink); padding-bottom: 4px; margin-top: 4px; }
+  .field .v small { font-size: 22px; font-weight: 500; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="col">
+    <div class="phone">
+      <div class="form">
+        <h2>最初に3つだけ</h2>
+        <div class="lead">あとで変えられます。だいたいで大丈夫です。</div>
+        <div class="rows">
+          <div class="row"><span class="k">給料日</span><span class="v">毎月25日</span></div>
+          <div class="row"><span class="k">手取り<small>先月の額でOK</small></span><span class="v num">¥98,000</span></div>
+          <div class="row"><span class="k">固定費<span class="seg"><span class="on">合計</span><span>内訳</span></span><small>家賃・スマホ・サブスクなど</small></span><span class="v num">¥52,000</span></div>
+          <div class="row"><span class="k">貯金<span class="seg"><span class="on">金額</span><span>割合</span></span><small>給料が入ったら先に分ける</small></span><span class="v num">¥10,000</span></div>
+          <div class="row"><span class="k">余ったら</span><span class="seg" style="font-size:13px"><span class="on">貯金へ</span><span>次の月へ</span></span></div>
+        </div>
+        <div class="result">
+          <div class="k">自由に使えるお金</div>
+          <div class="v num"><small>¥</small>36,000</div>
+          <div class="d">1週間あたり <span class="num">¥8,129</span></div>
+        </div>
+        <button class="primary">はじめる</button>
+      </div>
+    </div>
+    <div class="cap"><b>0. 初期設定</b>決めるのは収入・固定費・貯金だけ。自由に使えるお金はそこから自動で出る。固定費と貯金は「合計／内訳」「金額／割合」を切り替えられる。</div>
+  </div>
 
   <div class="col">
     <div class="phone">
@@ -86,7 +138,8 @@
         <div class="big num"><small>¥</small>8,420</div>
         <div class="perday">1日あたり <span class="num">¥2,105</span>（あと4日）</div>
         <div class="bar"><i></i></div>
-        <div class="barlabel"><span>使った ¥11,580</span><span>予算 ¥20,000</span></div>
+        <div class="barlabel"><span>使った ¥11,580</span><span>今週分 ¥20,000</span></div>
+        <div class="period"><span>給料日（11月25日）まで</span><span>あと <b class="num">¥41,200</b></span></div>
         <div class="note">先週の振り返りが <span class="num">6件</span> 残っています</div>
         <button class="addbtn">使った</button>
       </div>
@@ -127,6 +180,31 @@
       </div>
     </div>
     <div class="cap"><b>3. 週1の振り返り</b>1件ずつ「要った／要らなかった」を押すだけ。分類は後悔したかどうかだけ。</div>
+  </div>
+
+  <div class="col">
+    <div class="phone">
+      <div class="form">
+        <h2>給料日です</h2>
+        <div class="lead">振り込まれた額を入れてください。月に1回だけです。</div>
+        <div class="closed">
+          <div class="line"><span>10/25〜11/24 の自由なお金</span><span class="num">¥36,000</span></div>
+          <div class="line"><span>使った</span><span class="num">¥31,800</span></div>
+          <div class="line"><span>余り</span><span class="num saved">¥4,200 → 貯金へ</span></div>
+        </div>
+        <div class="field">
+          <div class="k">今月の手取り</div>
+          <div class="v num"><small>¥</small>104,300</div>
+        </div>
+        <div class="result">
+          <div class="k">次の給料日までの自由なお金</div>
+          <div class="v num"><small>¥</small>42,300</div>
+          <div class="d">固定費 ¥52,000・貯金 ¥10,000 を引いた額</div>
+        </div>
+        <button class="primary">これで始める</button>
+      </div>
+    </div>
+    <div class="cap"><b>4. 給料日</b>前の期間の結果を見せてから、今月の額を入れる。シフトで額が変わっても、入れ直すのはここだけ。入れ忘れても先月の額で仮に動く。</div>
   </div>
 
 </div>

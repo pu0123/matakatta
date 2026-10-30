@@ -23,11 +23,13 @@ export function pendingReview(
   settings: Settings,
 ): Expense[] {
   const currentWeekStart = weekRange(now, settings.weekStartsOn).start.getTime()
+  const startedAt = new Date(settings.startedAt).getTime()
 
   return expenses
     .filter(
       (expense) =>
         expense.verdict === undefined &&
+        new Date(expense.at).getTime() >= startedAt &&
         new Date(expense.at).getTime() < currentWeekStart,
     )
     .sort(
