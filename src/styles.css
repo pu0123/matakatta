@@ -91,10 +91,10 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 .primary-button:active, .keypad button:active, .segmented button:active,
 .review-choices button:active { transform: scale(0.98); }
 
-.screen-header { display: flex; align-items: flex-start; gap: 16px; }
+.screen-header { display: block; }
 .screen-header .text-button {
-  flex: 0 0 auto;
-  margin-top: 3px;
+  display: block;
+  margin: 0 0 18px;
   color: var(--sub);
   font-size: 14px;
 }
@@ -152,11 +152,10 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   max-width: 170px;
   align-items: baseline;
   justify-content: flex-end;
+  gap: 2px;
   font-weight: 600;
 }
 .amount-input input, .percent-input input {
-  width: 100%;
-  min-width: 40px;
   padding: 0;
   border: 0;
   outline: 0;
@@ -166,6 +165,8 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+.amount-input input { min-width: 1ch; }
+.percent-input input { width: 100%; min-width: 40px; }
 .stacked-row { align-items: stretch; flex-direction: column; }
 .row-heading, .item-list-footer {
   display: flex;
@@ -297,20 +298,14 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   line-height: 1.6;
   text-align: left;
 }
-.spend-button { width: 100%; margin-top: auto; }
+.home-actions { display: grid; gap: 8px; margin-top: auto; }
+.spend-button { width: 100%; }
 .toast {
-  position: fixed;
-  z-index: 2;
-  right: 16px;
-  bottom: max(16px, env(safe-area-inset-bottom));
-  left: 16px;
   display: flex;
-  max-width: 388px;
   min-height: 48px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: auto;
   padding: 10px 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -493,6 +488,12 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   font-size: 12px;
   font-weight: 500;
 }
+.record-day-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+}
 .record-row {
   display: flex;
   width: 100%;
@@ -501,14 +502,13 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   justify-content: space-between;
   gap: 16px;
   padding: 9px 12px;
-  border: 1px solid var(--line);
-  border-bottom: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
   color: var(--ink);
   background: var(--card);
   text-align: left;
 }
-.record-list > div:first-child .record-row { border-radius: 10px 10px 0 0; }
-.record-list > div:last-child .record-row { border-bottom: 1px solid var(--line); border-radius: 0 0 10px 10px; }
+.record-row:first-child { border-top: 0; }
 .record-row > span {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
