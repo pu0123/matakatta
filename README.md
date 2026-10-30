@@ -2,7 +2,7 @@
 
 家計簿が続かない人のための、週ごとの「あといくら使えるか」だけを出す Web アプリ。
 
-https://buy-again.pages.dev/
+https://buyagain.pages.dev/
 
 ## 何をするものか
 
@@ -67,6 +67,7 @@ npm install
 npm run dev     # 開発用サーバー
 npm test        # 計算部分のテスト
 npm run build   # 公開用ビルド
+npm run deploy  # テスト→ビルド→ Cloudflare Pages へ公開（要 wrangler login）
 ```
 
 React + TypeScript + Vite。外部の UI ライブラリは使っていない。

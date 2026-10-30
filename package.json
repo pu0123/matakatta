@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm test && npm run build && wrangler pages deploy dist --project-name buyagain --branch main"
   },
   "dependencies": {
     "react": "^19.1.0",
