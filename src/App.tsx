@@ -7,13 +7,25 @@ import { Home } from './screens/Home'
 import { Payday } from './screens/Payday'
 import { Review } from './screens/Review'
 import { Setup } from './screens/Setup'
+import { ShortcutGuide } from './screens/ShortcutGuide'
 import type { Screen } from './screens/types'
+import { parseShortcutParams } from './shortcutParams'
 import { useStore } from './useStore'
 import './styles.css'
 
+const startupShortcutParams = parseShortcutParams(location.search)
+
+if (startupShortcutParams.hasAmount) {
+  history.replaceState(history.state, '', `${location.pathname}${location.hash}`)
+}
+
 function App() {
   const store = useStore()
-  const [screen, setScreen] = useState<Screen>('home')
+  const hasStartupEntry = Boolean(store.settings && startupShortcutParams.hasAmount)
+  const [screen, setScreen] = useState<Screen>(hasStartupEntry ? 'entry' : 'home')
+  const [shortcutEntry, setShortcutEntry] = useState(
+    hasStartupEntry ? startupShortcutParams : null,
+  )
   const [undo, setUndo] = useState<Expense | null>(null)
   const now = new Date()
 
@@ -53,10 +65,18 @@ function App() {
           <Entry
             budget={budget}
             expenses={store.expenses}
-            onCancel={() => setScreen('home')}
+            initialAmount={shortcutEntry?.amount}
+            initialNote={shortcutEntry?.note}
+            fromShortcut={shortcutEntry?.viaShortcut}
+            amountReadError={Boolean(shortcutEntry && shortcutEntry.amount === undefined)}
+            onCancel={() => {
+              setShortcutEntry(null)
+              setScreen('home')
+            }}
             onRecord={(expense) => {
               store.addExpense(expense)
               setUndo(expense)
+              setShortcutEntry(null)
               setScreen('home')
             }}
           />
@@ -101,12 +121,15 @@ function App() {
             incomes={store.incomes}
             editing
             onCancel={() => setScreen('home')}
+            onOpenShortcutGuide={() => setScreen('shortcutGuide')}
             onSave={(settings, forecast) => {
               store.saveSetup(settings, forecast)
               setScreen('home')
             }}
           />
         )
+      case 'shortcutGuide':
+        return <ShortcutGuide onBack={() => setScreen('settings')} />
       default:
         return (
           <Home

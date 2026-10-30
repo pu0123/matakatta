@@ -242,8 +242,25 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   margin-top: 8px;
 }
 .adjust-field .amount-input { padding-bottom: 3px; border-bottom: 1px solid var(--ink); }
-.form-screen > .primary-button { width: 100%; margin-top: auto; }
-.form-screen .result-block + .primary-button { margin-top: max(24px, auto); }
+.form-actions {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 14px;
+  width: 100%;
+  padding-top: 24px;
+  margin-top: auto;
+}
+.form-actions .primary-button { width: 100%; }
+.shortcut-link {
+  justify-self: center;
+  padding: 0;
+  border: 0;
+  color: var(--sub);
+  background: transparent;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* home */
 .home-screen {
@@ -329,6 +346,12 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   color: var(--sub);
   font-size: 15px;
 }
+.shortcut-source {
+  margin-top: 12px;
+  color: var(--sub);
+  font-size: 12px;
+  text-align: center;
+}
 .date-toggle { display: flex; align-items: center; }
 .date-toggle button { color: var(--sub); }
 .date-toggle button.selected { color: var(--ink); font-weight: 600; }
@@ -346,6 +369,13 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   margin-top: 6px;
   color: var(--sub);
   font-size: 13px;
+  text-align: right;
+}
+.shortcut-error {
+  padding: 0 24px;
+  margin-top: 8px;
+  color: var(--minus);
+  font-size: 12px;
   text-align: right;
 }
 .memo-area { padding: 0 16px; margin-top: 28px; }
@@ -471,6 +501,46 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 .income-field .amount-input > span { font-size: 22px; font-weight: 500; }
 .payday-result > div { margin-top: 2px; color: var(--sub); font-size: 13px; }
+
+/* shortcut guide */
+.shortcut-guide-screen {
+  padding: max(42px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+}
+.shortcut-steps {
+  padding-left: 24px;
+  margin: 28px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.shortcut-steps li + li { margin-top: 12px; }
+.shortcut-url-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 24px;
+}
+.shortcut-url-row label { min-width: 0; }
+.shortcut-url-row input {
+  width: 100%;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+  background: var(--card);
+  font-size: 12px;
+}
+.shortcut-test-button { width: 100%; margin-top: 16px; }
+.shortcut-notes {
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.shortcut-notes p { margin: 0; }
+.shortcut-notes p + p { margin-top: 12px; }
 
 /* records */
 .records-screen { padding: max(42px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom)); }

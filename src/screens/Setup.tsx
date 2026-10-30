@@ -16,6 +16,7 @@ interface SetupProps {
   incomes: Income[]
   editing?: boolean
   onCancel?: () => void
+  onOpenShortcutGuide?: () => void
   onSave: (settings: Settings, forecast: Income) => void
 }
 
@@ -29,6 +30,7 @@ export function Setup({
   incomes,
   editing = false,
   onCancel,
+  onOpenShortcutGuide,
   onSave,
 }: SetupProps) {
   const now = useMemo(() => new Date(), [])
@@ -327,9 +329,16 @@ export function Setup({
         )}
       </section>
 
-      <button className="primary-button" onClick={submit}>
-        {editing ? '保存する' : 'はじめる'}
-      </button>
+      <div className="form-actions">
+        <button className="primary-button" onClick={submit}>
+          {editing ? '保存する' : 'はじめる'}
+        </button>
+        {editing && onOpenShortcutGuide && (
+          <button className="shortcut-link" onClick={onOpenShortcutGuide}>
+            Apple Pay と連携する
+          </button>
+        )}
+      </div>
     </main>
   )
 }

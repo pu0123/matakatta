@@ -7,13 +7,26 @@ import { noteSuggestions } from '../noteSuggestions'
 interface EntryProps {
   budget: CurrentBudget
   expenses: Expense[]
+  initialAmount?: number
+  initialNote?: string
+  fromShortcut?: boolean
+  amountReadError?: boolean
   onCancel: () => void
   onRecord: (expense: Expense) => void
 }
 
-export function Entry({ budget, expenses, onCancel, onRecord }: EntryProps) {
-  const [digits, setDigits] = useState('')
-  const [note, setNote] = useState('')
+export function Entry({
+  budget,
+  expenses,
+  initialAmount,
+  initialNote,
+  fromShortcut = false,
+  amountReadError = false,
+  onCancel,
+  onRecord,
+}: EntryProps) {
+  const [digits, setDigits] = useState(initialAmount?.toString() ?? '')
+  const [note, setNote] = useState(initialNote ?? '')
   const [when, setWhen] = useState<'today' | 'yesterday'>('today')
   const amount = Number(digits || 0)
   const suggestions = noteSuggestions(expenses)
@@ -58,12 +71,17 @@ export function Entry({ budget, expenses, onCancel, onRecord }: EntryProps) {
         </div>
       </header>
 
+      {fromShortcut && <div className="shortcut-source">Apple Pay から</div>}
+
       <div className="entry-amount num"><small>¥</small>{formatNumber(amount)}</div>
       <div className="after-entry num">
         {leftAfter >= 0
           ? `記録すると今週あと ${yen(leftAfter)}`
           : `記録すると今週 ${yen(-leftAfter)} オーバー`}
       </div>
+      {amountReadError && (
+        <div className="shortcut-error" role="alert">金額を読み取れませんでした</div>
+      )}
 
       <div className="memo-area">
         <label>

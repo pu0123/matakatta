@@ -77,12 +77,14 @@ export function Payday({
         <div>固定費 {yen(breakdown.fixedCosts)}・貯金 {yen(breakdown.savings)} を引いた額</div>
       </section>
 
-      <button
-        className="primary-button"
-        onClick={() => onSave({ periodStart: dateKey(budget.period.start), amount })}
-      >
-        これで始める
-      </button>
+      <div className="form-actions">
+        <button
+          className="primary-button"
+          onClick={() => onSave({ periodStart: dateKey(budget.period.start), amount })}
+        >
+          これで始める
+        </button>
+      </div>
     </main>
   )
 }
