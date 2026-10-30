@@ -57,6 +57,10 @@
   .amount { padding: 0 24px; margin-top: 72px; text-align: right; font-size: 56px; font-weight: 600; }
   .amount small { font-size: 26px; font-weight: 500; }
   .after { padding: 0 24px; text-align: right; font-size: 13px; color: var(--sub); margin-top: 6px; }
+  .memo { padding: 0 16px; margin-top: 28px; }
+  .memofield { height: 40px; border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; color: #a3a29b; }
+  .chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .chips span { font-size: 12px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--sub); background: var(--card); }
   .pad { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: var(--paper); }
   .pad span { height: 54px; display: grid; place-items: center; background: var(--key); border-radius: 10px; font-size: 24px; }
   .pad .ok { grid-column: span 3; background: var(--ink); color: #fff; font-size: 17px; font-weight: 600; }
@@ -153,6 +157,10 @@
         <div class="top"><span>やめる</span><span>今日</span></div>
         <div class="amount num"><small>¥</small>780</div>
         <div class="after">記録すると今週あと ¥7,640</div>
+        <div class="memo">
+          <div class="memofield">メモ（なくても可）</div>
+          <div class="chips"><span>スタバ</span><span>コンビニ</span><span>昼ごはん</span><span>服</span></div>
+        </div>
         <div class="pad num">
           <span>1</span><span>2</span><span>3</span>
           <span>4</span><span>5</span><span>6</span>
@@ -162,7 +170,7 @@
         </div>
       </div>
     </div>
-    <div class="cap"><b>2. 入力</b>金額だけ。何に使ったかは聞かない。押す前に「記録したら残りいくら」が見える。</div>
+    <div class="cap"><b>2. 入力</b>金額だけで記録できる。書きたい人だけメモを残せて、前に書いた言葉はワンタップで再利用。押す前に「記録したら残りいくら」が見える。</div>
   </div>
 
   <div class="col">
@@ -172,6 +180,7 @@
         <div class="count">6件中 2件目</div>
         <div class="item">
           <div class="when">10月22日（水） 23:14</div>
+          <div class="when" style="margin-top:2px;color:var(--ink)">メモなし</div>
           <div class="amt num"><small>¥</small>1,980</div>
           <div class="hint">何に使ったか思い出せなくても大丈夫</div>
         </div>
