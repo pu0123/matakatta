@@ -531,6 +531,13 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   font-size: 12px;
 }
 .shortcut-test-button { width: 100%; margin-top: 16px; }
+.shortcut-start-button { width: 100%; margin-top: 40px; }
+.shortcut-test-message {
+  margin: 10px 0 0;
+  color: var(--ok);
+  font-size: 13px;
+  line-height: 1.6;
+}
 .shortcut-notes {
   padding-top: 20px;
   margin-top: 24px;
@@ -541,6 +548,37 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 .shortcut-notes p { margin: 0; }
 .shortcut-notes p + p { margin-top: 12px; }
+.shortcut-stop-button { display: block; margin: 28px auto 0; }
+
+/* inbox */
+.inbox-screen { padding: max(42px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom)); }
+.inbox-list { display: grid; gap: 12px; margin-top: 28px; }
+.inbox-item {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.inbox-item-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 12px;
+  padding: 14px;
+}
+.inbox-item-details time { grid-column: 1 / -1; color: var(--sub); font-size: 11px; }
+.inbox-item-details span { min-width: 0; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.inbox-item-details strong { font-size: 16px; }
+.inbox-item-actions { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.inbox-item-actions button {
+  min-height: 42px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: transparent;
+  font-size: 13px;
+}
+.inbox-item-actions button:first-child { border-left: 0; color: var(--sub); }
+.inbox-item-actions button.dark { color: var(--paper); background: var(--ink); }
+.inbox-record-all { width: 100%; margin-top: 24px; }
 
 /* records */
 .records-screen { padding: max(42px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom)); }
@@ -632,3 +670,5 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 @media (min-width: 421px) {
   .app-shell { border-right: 1px solid rgba(0, 0, 0, 0.08); border-left: 1px solid rgba(0, 0, 0, 0.08); }
 }
+
+.shortcut-lead { margin: 20px 0 0; color: var(--sub); font-size: 14px; line-height: 1.7; }

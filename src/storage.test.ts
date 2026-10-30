@@ -27,11 +27,19 @@ describe('storage', () => {
       settings: null,
       expenses: [{ id: '1', amount: 780, at: '2026-10-30T12:00:00.000Z' }],
       incomes: [],
+      inbox: [],
     }
 
     saveStore(data, storage)
 
     expect(storage.value()).toContain('"expenses"')
     expect(loadStore(storage)).toEqual(data)
+  })
+
+  it('以前の保存データには空の受け箱を補う', () => {
+    const storage = memoryStorage(
+      JSON.stringify({ settings: null, expenses: [], incomes: [] }),
+    )
+    expect(loadStore(storage).inbox).toEqual([])
   })
 })

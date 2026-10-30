@@ -36,4 +36,5 @@ export interface Settings {
   leftover: LeftoverPolicy
   startedAt: string
   initialFree: Yen
+  inboxToken?: string
 }

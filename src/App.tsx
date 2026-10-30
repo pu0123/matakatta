@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { current, type CurrentBudget } from './core/budget'
 import type { Expense } from './core/types'
+import { syncInbox } from './inbox'
 import { Entry } from './screens/Entry'
 import { History } from './screens/History'
 import { Home } from './screens/Home'
+import { Inbox } from './screens/Inbox'
 import { Payday } from './screens/Payday'
 import { Review } from './screens/Review'
 import { Setup } from './screens/Setup'
@@ -21,6 +23,8 @@ if (startupShortcutParams.hasAmount) {
 
 function App() {
   const store = useStore()
+  const receiveInboxItemsRef = useRef(store.receiveInboxItems)
+  receiveInboxItemsRef.current = store.receiveInboxItems
   const hasStartupEntry = Boolean(store.settings && startupShortcutParams.hasAmount)
   const [screen, setScreen] = useState<Screen>(hasStartupEntry ? 'entry' : 'home')
   const [shortcutEntry, setShortcutEntry] = useState(
@@ -34,6 +38,22 @@ function App() {
     const timer = window.setTimeout(() => setUndo(null), 5000)
     return () => window.clearTimeout(timer)
   }, [undo])
+
+  useEffect(() => {
+    const token = store.settings?.inboxToken
+    if (!token) return
+
+    const receive = () => {
+      void syncInbox(token, (items) => receiveInboxItemsRef.current(items))
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') receive()
+    }
+
+    receive()
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange)
+  }, [store.settings?.inboxToken])
 
   if (!store.settings) {
     return (
@@ -129,7 +149,34 @@ function App() {
           />
         )
       case 'shortcutGuide':
-        return <ShortcutGuide onBack={() => setScreen('settings')} />
+        return (
+          <ShortcutGuide
+            token={store.settings.inboxToken}
+            onBack={() => setScreen('settings')}
+            onTokenChange={(token) => {
+              if (!store.settings) return
+              const settings = { ...store.settings }
+              if (token) settings.inboxToken = token
+              else delete settings.inboxToken
+              store.setSettings(settings)
+            }}
+          />
+        )
+      case 'inbox':
+        return (
+          <Inbox
+            items={store.inbox}
+            onBack={() => setScreen('home')}
+            onDiscard={(id) => {
+              store.discardInboxItem(id)
+              if (store.inbox.length === 1) setScreen('home')
+            }}
+            onRecord={(ids) => {
+              store.recordInboxItems(ids)
+              if (ids.length >= store.inbox.length) setScreen('home')
+            }}
+          />
+        )
       default:
         return (
           <Home
@@ -143,6 +190,7 @@ function App() {
               if (undo) store.deleteExpense(undo.id)
               setUndo(null)
             }}
+            inboxCount={store.inbox.length}
           />
         )
     }

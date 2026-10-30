@@ -6,3 +6,4 @@ export type Screen =
   | 'records'
   | 'settings'
   | 'shortcutGuide'
+  | 'inbox'

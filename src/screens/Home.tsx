@@ -12,6 +12,7 @@ interface HomeProps {
   onNavigate: (screen: Screen) => void
   undo: Expense | null
   onUndo: () => void
+  inboxCount: number
 }
 
 function startOfDay(date: Date): Date {
@@ -20,7 +21,7 @@ function startOfDay(date: Date): Date {
   return result
 }
 
-export function Home({ budget, settings, expenses, now, onNavigate, undo, onUndo }: HomeProps) {
+export function Home({ budget, settings, expenses, now, onNavigate, undo, onUndo, inboxCount }: HomeProps) {
   const reviews = pendingReview(expenses, now, settings)
   const firstPeriod =
     budget.period.start.getTime() === startOfDay(new Date(settings.startedAt)).getTime()
@@ -82,6 +83,11 @@ export function Home({ budget, settings, expenses, now, onNavigate, undo, onUndo
       </div>
 
       <div className="notices">
+        {inboxCount > 0 && (
+          <button onClick={() => onNavigate('inbox')}>
+            Apple Pay から <span className="num">{inboxCount}件</span> 届いています
+          </button>
+        )}
         {budget.period.isEstimate && !firstPeriod && (
           <button onClick={() => onNavigate('payday')}>給料日の額を入れてください</button>
         )}

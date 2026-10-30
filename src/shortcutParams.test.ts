@@ -2,26 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { parseShortcutParams } from './shortcutParams'
 
 describe('parseShortcutParams', () => {
-  it.each([
-    ['780', 780],
-    ['¥780', 780],
-    ['￥１，２８０', 1_280],
-    ['1,280円', 1_280],
-    ['780.00', 780],
-    ['780.5', 780],
-    ['JPY 780', 780],
-  ])('%s を金額として読み取る', (value, expected) => {
-    expect(parseShortcutParams(`?amount=${encodeURIComponent(value)}`).amount).toBe(expected)
+  it('共通の金額読み取りを使う', () => {
+    expect(parseShortcutParams('?amount=%EF%BF%A5%EF%BC%91%EF%BC%8C%EF%BC%92%EF%BC%98%EF%BC%90').amount).toBe(1_280)
   })
-
-  it.each(['0', '-500', 'abc', '', '10000000'])(
-    '%s は金額として読み取らない',
-    (value) => {
-      const result = parseShortcutParams(`?amount=${encodeURIComponent(value)}`)
-      expect(result.hasAmount).toBe(true)
-      expect(result.amount).toBeUndefined()
-    },
-  )
 
   it('amount が無いことを区別する', () => {
     expect(parseShortcutParams('?note=店名').hasAmount).toBe(false)

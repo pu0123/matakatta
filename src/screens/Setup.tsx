@@ -95,6 +95,7 @@ export function Setup({
       leftover,
       startedAt: existing?.startedAt ?? now.toISOString(),
       initialFree,
+      ...(existing?.inboxToken ? { inboxToken: existing.inboxToken } : {}),
     }
     const forecastStart = periodOf(now, payday).end
     onSave(settings, { periodStart: dateKey(forecastStart), amount: income })

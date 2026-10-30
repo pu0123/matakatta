@@ -1,0 +1,11 @@
+# Cloudflare Pages（buyagain.pages.dev）の設定。
+# サーバー側は Apple Pay の支払いを一時的に預かる「受け箱」だけ（functions/api/inbox）。
+name = "buyagain"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "INBOX"
+database_name = "buyagain-inbox"
+database_id = "721b02d7-4445-40c7-bf47-1d4f61ffae25"
+migrations_dir = "migrations"
