@@ -18,6 +18,8 @@ export function Entry({ budget, expenses, onCancel, onRecord }: EntryProps) {
   const amount = Number(digits || 0)
   const suggestions = noteSuggestions(expenses)
 
+  const leftAfter = leftAfterExpense(budget, amount)
+
   const press = (key: string) => {
     if (key === 'back') {
       setDigits((currentDigits) => currentDigits.slice(0, -1))
@@ -57,7 +59,11 @@ export function Entry({ budget, expenses, onCancel, onRecord }: EntryProps) {
       </header>
 
       <div className="entry-amount num"><small>¥</small>{formatNumber(amount)}</div>
-      <div className="after-entry num">記録すると今週あと {yen(leftAfterExpense(budget, amount))}</div>
+      <div className="after-entry num">
+        {leftAfter >= 0
+          ? `記録すると今週あと ${yen(leftAfter)}`
+          : `記録すると今週 ${yen(-leftAfter)} オーバー`}
+      </div>
 
       <div className="memo-area">
         <label>

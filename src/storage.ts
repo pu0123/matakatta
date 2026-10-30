@@ -1,6 +1,6 @@
 import type { Expense, Income, Settings } from './core/types'
 
-export const STORAGE_KEY = 'atoikura:v1'
+export const STORAGE_KEY = 'matakatta:v1'
 
 export interface StoredData {
   settings: Settings | null

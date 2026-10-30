@@ -1,54 +1,71 @@
-# React + TypeScript + Vite
+# また買ったの？
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+家計簿が続かない人のための、週ごとの「あといくら使えるか」だけを出す Web アプリ。
 
-Currently, two official plugins are available:
+https://pu0123.github.io/matakatta/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 何をするものか
 
-## Expanding the ESLint configuration
+- 給料日に手取りを入れると、固定費と貯金を引いた「自由に使えるお金」を出し、週ごとに配る
+- 使ったら金額だけ入れる。何に使ったかは書いても書かなくてもいい
+- ホームに出るのは「今週あと使える額」と「1日あたり」だけ
+- 週に一度、記録を1件ずつ「要った／要らなかった」に振り分ける。要らなかった分の合計が、浪費の実額になる
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+データは端末の中（ブラウザの localStorage）にだけ保存し、どこにも送らない。
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## なぜ作ったか
+
+<!-- ここは自分の言葉で書き直す -->
+浪費癖を直したかったが、家計簿は「何に使ったか」を毎回選ぶのが面倒で続かなかった。
+分類をやめて、入力は金額だけにした。かわりに週に一度、後悔したかどうかだけで振り返る。
+食費・娯楽のような分類よりも、「なくてもよかったお金」が見える方が行動が変わると考えた。
+
+## 設計で決めたこと
+
+| 決めたこと | 理由 |
+|---|---|
+| 区切りは暦の月ではなく給料日から給料日 | お金が入った日から次に入る日までで暮らしているため |
+| 予算は本人が決めず、手取り − 固定費 − 貯金 で出す | バイトなど収入が月ごとに変わる人でも、入れ直すのは手取りだけで済む |
+| 使いすぎは翌週・翌期間から引く。余りは週をまたいで持ち越さない | 余りを積むと「先週浮いたから」で緩む。余りは期間の終わりにまとめて貯金へ回すか、次の期間へ足すかを選べる |
+| 分類は「要った／要らなかった」の2つだけ | 記録の手間を増やさず、浪費の額だけははっきり出すため |
+| 給料日をまたぐ週は2つに分けて日割り | 給料日前後で使える額が混ざらないようにするため |
+| サーバーを持たない | お金の記録を外に出さない。アカウント登録も不要 |
+
+## 作っていないもの・できないこと
+
+- カードや電子マネーの自動取り込み。個人が作るアプリから明細を読む手段が一般に開かれていないため。
+  iPhone の Apple Pay だけは「ショートカット」から金額と店名を渡せるので、後から対応する予定
+- 端末をまたいだ同期（サーバーを持たないため）
+
+## 構成
+
+```
+src/
+  core/      予算の計算（画面に依存しない。テストはここに集中）
+    period.ts  給料日の区切り
+    week.ts    週の区切り
+    budget.ts  期間の自由なお金、週への配分、残額
+    review.ts  振り返りの集計
+  screens/   画面ごと（初期設定・ホーム・入力・振り返り・給料日・記録）
+  storage.ts localStorage の読み書き
+docs/
+  mockup.html  最初に作った画面のラフ
+  tasks/       実装の依頼書（どういう順で何を決めたかの記録）
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 開発の進め方
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+仕様と画面の判断は自分で行い、実装は AI のコーディングツール（Claude Code と Codex）に任せた。
+`docs/tasks/` の依頼書を Claude Code が書き、Codex が実装し、Claude Code がテストとブラウザでの動作確認をする分担。
+企画・仕様の変更（給料日区切りへの変更、メモを任意にする、名前など）は、触ってみて自分が出したもの。
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## 動かし方
+
+```bash
+npm install
+npm run dev     # 開発用サーバー
+npm test        # 計算部分のテスト
+npm run build   # 公開用ビルド
 ```
+
+React + TypeScript + Vite。外部の UI ライブラリは使っていない。
