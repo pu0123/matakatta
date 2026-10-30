@@ -94,16 +94,52 @@ function incomeForPeriod(
   }
 }
 
-function fixedCosts(settings: Settings): Yen {
-  return settings.fixedCosts.mode === 'total'
-    ? settings.fixedCosts.total
-    : settings.fixedCosts.items.reduce((total, item) => total + item.amount, 0)
+export interface BudgetBreakdown {
+  income: Yen
+  fixedCosts: Yen
+  savings: Yen
+  free: Yen
 }
 
-function savingsForIncome(settings: Settings, income: Yen): Yen {
-  return settings.savings.mode === 'amount'
-    ? settings.savings.amount
-    : Math.floor((income * settings.savings.percent) / 100)
+export function budgetBreakdown(
+  settings: Pick<Settings, 'fixedCosts' | 'savings'>,
+  income: Yen,
+): BudgetBreakdown {
+  const fixed =
+    settings.fixedCosts.mode === 'total'
+      ? settings.fixedCosts.total
+      : settings.fixedCosts.items.reduce(
+          (total, item) => total + item.amount,
+          0,
+        )
+  const savings =
+    settings.savings.mode === 'amount'
+      ? settings.savings.amount
+      : Math.floor((income * settings.savings.percent) / 100)
+
+  return {
+    income,
+    fixedCosts: fixed,
+    savings,
+    free: income - fixed - savings,
+  }
+}
+
+export function initialFreeFor(
+  settings: Pick<Settings, 'payday' | 'fixedCosts' | 'savings'>,
+  income: Yen,
+  now: Date,
+): Yen {
+  const payPeriod = periodOf(now, settings.payday)
+  const remainingDays = calendarDays(now, payPeriod.end)
+  const periodDays = calendarDays(payPeriod.start, payPeriod.end)
+  return Math.floor(
+    (budgetBreakdown(settings, income).free * remainingDays) / periodDays,
+  )
+}
+
+export function leftAfterExpense(budget: CurrentBudget, amount: Yen): Yen {
+  return budget.week.left - amount
 }
 
 function firstPeriod(settings: Settings): PeriodRange {
@@ -138,8 +174,7 @@ function calculatedPeriodsThrough(
       const carryIn =
         settings.leftover === 'carryOver' ? previousLeftover : 0
       const { income, isEstimate } = incomeForPeriod(incomes, range.start)
-      const base =
-        income - fixedCosts(settings) - savingsForIncome(settings, income)
+      const base = budgetBreakdown(settings, income).free
 
       periods.push({
         ...range,

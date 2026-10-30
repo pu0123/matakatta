@@ -1,20 +1,40 @@
 import type { Expense, Settings, Yen } from './types'
 import { weekRange } from './week'
 
+export interface UnneededSummary {
+  total: Yen
+  count: number
+}
+
+export function unneededSummary(
+  expenses: Expense[],
+  from: Date,
+  to: Date,
+): UnneededSummary {
+  const fromTime = from.getTime()
+  const toTime = to.getTime()
+
+  return expenses.reduce<UnneededSummary>(
+    (summary, expense) => {
+      const at = new Date(expense.at).getTime()
+      if (expense.verdict !== 'unneeded' || at < fromTime || at >= toTime) {
+        return summary
+      }
+      return {
+        total: summary.total + expense.amount,
+        count: summary.count + 1,
+      }
+    },
+    { total: 0, count: 0 },
+  )
+}
+
 export function unneededTotal(
   expenses: Expense[],
   from: Date,
   to: Date,
 ): Yen {
-  const fromTime = from.getTime()
-  const toTime = to.getTime()
-
-  return expenses.reduce((total, expense) => {
-    const at = new Date(expense.at).getTime()
-    return expense.verdict === 'unneeded' && at >= fromTime && at < toTime
-      ? total + expense.amount
-      : total
-  }, 0)
+  return unneededSummary(expenses, from, to).total
 }
 
 export function pendingReview(

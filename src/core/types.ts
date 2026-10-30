@@ -6,6 +6,7 @@ export interface Expense {
   id: string
   amount: Yen
   at: string
+  note?: string
   verdict?: Verdict
 }
 
